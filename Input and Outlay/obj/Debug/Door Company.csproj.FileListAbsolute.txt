@@ -1,0 +1,9 @@
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\BelarusianDoorDataSET\BelarusianDoor\obj\Debug\Door Company.csprojResolveAssemblyReference.cache
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\BelarusianDoorDataSET\BelarusianDoor\obj\Debug\BelarusianDoor.Form1.resources
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\BelarusianDoorDataSET\BelarusianDoor\obj\Debug\BelarusianDoor.Properties.Resources.resources
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\BelarusianDoorDataSET\BelarusianDoor\obj\Debug\Door Company.csproj.GenerateResource.Cache
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\BelarusianDoorDataSET\BelarusianDoor\obj\Debug\BelarusianDoor.exe
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\BelarusianDoorDataSET\BelarusianDoor\obj\Debug\BelarusianDoor.pdb
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\BelarusianDoorDataSET\BelarusianDoor\bin\Debug\BelarusianDoor.exe.config
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\BelarusianDoorDataSET\BelarusianDoor\bin\Debug\BelarusianDoor.exe
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\BelarusianDoorDataSET\BelarusianDoor\bin\Debug\BelarusianDoor.pdb

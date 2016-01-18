@@ -1,0 +1,13 @@
+c:\users\виталий\documents\visual studio 2015\Projects\BelarusianDoor\BelarusianDoor\bin\Debug\BelarusianDoor.exe.config
+c:\users\виталий\documents\visual studio 2015\Projects\BelarusianDoor\BelarusianDoor\bin\Debug\BelarusianDoor.exe
+c:\users\виталий\documents\visual studio 2015\Projects\BelarusianDoor\BelarusianDoor\bin\Debug\BelarusianDoor.pdb
+c:\users\виталий\documents\visual studio 2015\Projects\BelarusianDoor\BelarusianDoor\obj\Debug\BelarusianDoor.csprojResolveAssemblyReference.cache
+c:\users\виталий\documents\visual studio 2015\Projects\BelarusianDoor\BelarusianDoor\obj\Debug\BelarusianDoor.Form1.resources
+c:\users\виталий\documents\visual studio 2015\Projects\BelarusianDoor\BelarusianDoor\obj\Debug\BelarusianDoor.Properties.Resources.resources
+c:\users\виталий\documents\visual studio 2015\Projects\BelarusianDoor\BelarusianDoor\obj\Debug\BelarusianDoor.csproj.GenerateResource.Cache
+c:\users\виталий\documents\visual studio 2015\Projects\BelarusianDoor\BelarusianDoor\obj\Debug\BelarusianDoor.exe
+c:\users\виталий\documents\visual studio 2015\Projects\BelarusianDoor\BelarusianDoor\obj\Debug\BelarusianDoor.pdb
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\BelarusianDoor\BelarusianDoor\bin\Debug\BelarussianDoor.accdb
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\BelarusianDoorDataSET\BelarusianDoor\bin\Debug\BelarusianDoor.exe.config
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\BelarusianDoorDataSET\BelarusianDoor\obj\Debug\BelarusianDoor.exe
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\BelarusianDoorDataSET\BelarusianDoor\obj\Debug\BelarusianDoor.pdb
