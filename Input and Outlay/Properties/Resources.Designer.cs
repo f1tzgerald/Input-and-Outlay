@@ -79,5 +79,25 @@ namespace BelarusianDoor.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Hopstarter_Sleek_Xp_Basic_Money {
+            get {
+                object obj = ResourceManager.GetObject("Hopstarter_Sleek_Xp_Basic_Money", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Paomedia_Small_N_Flat_Money {
+            get {
+                object obj = ResourceManager.GetObject("Paomedia_Small_N_Flat_Money", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }

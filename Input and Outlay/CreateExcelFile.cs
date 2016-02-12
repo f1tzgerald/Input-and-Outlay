@@ -77,45 +77,56 @@ namespace BelarusianDoor
                     File.Delete(dateFile);
             }
 
-            oApp = new Excel.Application();
-            oBook = oApp.Workbooks.Add();
-            oSheet = (Excel.Worksheet) oBook.Worksheets.get_Item(1);
-
-            // Заполняем файл данными
-            CreateFullFile();
-            InputInformationFields(moneyAtStart, moneyBalance);
-
-            // Зберігаємо файл в форматі екселя
-            oBook.SaveAs(dateFile);
-
-            // Зберігаємо файл в форматі пдф
-            // Перевіряємо чи є папка року (2015/2016/2017)
-            string directoryFolderPDF = "D:\\ExcelFilesDveriBelorusii\\PDF\\" + yearInput;
-            if (!Directory.Exists(directoryFolderPDF))
+            try
             {
-                Directory.CreateDirectory(directoryFolderPDF);
-            }
+                oApp = new Excel.Application();
+                oBook = oApp.Workbooks.Add();
+                oSheet = (Excel.Worksheet)oBook.Worksheets.get_Item(1);
 
-            // Перевіряємо чи є папка місяця (грудень/січень/лютий)
-            string monthFolderPDF = directoryFolderPDF + "\\" + monthInput;
-            if (!Directory.Exists(monthFolderPDF))
+                // Заполняем файл данными
+                CreateFullFile();
+                InputInformationFields(moneyAtStart, moneyBalance);
+
+                // Зберігаємо файл в форматі екселя
+                oBook.SaveAs(dateFile);
+
+                // Зберігаємо файл в форматі пдф
+                // Перевіряємо чи є папка року (2015/2016/2017)
+                string directoryFolderPDF = "D:\\ExcelFilesDveriBelorusii\\PDF\\" + yearInput;
+                if (!Directory.Exists(directoryFolderPDF))
+                {
+                    Directory.CreateDirectory(directoryFolderPDF);
+                }
+
+                // Перевіряємо чи є папка місяця (грудень/січень/лютий)
+                string monthFolderPDF = directoryFolderPDF + "\\" + monthInput;
+                if (!Directory.Exists(monthFolderPDF))
+                {
+                    Directory.CreateDirectory(monthFolderPDF);
+                }
+
+                string dateFilePDF = monthFolderPDF + "\\" + dateForFileName;
+
+                // Якщо файл існує - видаляємо і створюємо новий
+                if (File.Exists(dateFilePDF))
+                {
+                    File.Delete(dateFilePDF);
+                }
+
+                oBook.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, dateFilePDF + ".pdf");
+
+
+                MessageBox.Show("Дані збережено!");
+            }
+            catch (Exception ex)
             {
-                Directory.CreateDirectory(monthFolderPDF);
+                MessageBox.Show(ex.ToString(), "Error");
             }
-
-            string dateFilePDF = monthFolderPDF + "\\" + dateForFileName;
-
-            // Якщо файл існує - видаляємо і створюємо новий
-            if (File.Exists(dateFilePDF))
+            finally
             {
-                File.Delete(dateFilePDF);
+                oBook.Close();
+                oApp.Quit();
             }
-
-            oBook.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, dateFilePDF + ".pdf");
-            oBook.Close();
-            oApp.Quit();
-
-            MessageBox.Show("Дані збережено!");
         }
         
         private void CreateFullFile()
@@ -334,7 +345,8 @@ namespace BelarusianDoor
                 oCells.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
                 oCells.Borders.Weight = Excel.XlBorderWeight.xlThin;
                 oCells.Font.Size = 12;
-                oCells.NumberFormat = "0.00";
+                oCells.EntireColumn.AutoFit();
+                //oCells.NumberFormat = "$#.##";
 
                 // Заповнюємо даними ХТО ДАВ ГРОШІ
                 string cellNameWhoGiveMoney = "B" + j;
@@ -384,7 +396,7 @@ namespace BelarusianDoor
                 oCells.Font.Size = 12;
                 oCells.HorizontalAlignment = Excel.Constants.xlCenter;
                 oCells.VerticalAlignment = Excel.Constants.xlCenter;
-                oCells.NumberFormat = "0.00";
+                //oCells.NumberFormat = "$#.##";
 
 
                 string cellNameWhereMoneyComes = "F" + j;
@@ -427,7 +439,7 @@ namespace BelarusianDoor
             oCells.VerticalAlignment = Excel.Constants.xlCenter;
             oCells.Font.Size = 12;
             oCells.Font.Bold = true;
-            oCells.NumberFormat = "0.00";
+            //oCells.NumberFormat = "$#.##";
 
             // Кількість грошей, що залишилася:
             oCells = oSheet.Range["E20", "F20"];
@@ -437,7 +449,7 @@ namespace BelarusianDoor
             oCells.VerticalAlignment = Excel.Constants.xlCenter;
             oCells.Font.Size = 12;
             oCells.Font.Bold = true;
-            oCells.NumberFormat = "0.00";
+            //oCells.NumberFormat = "$#.##";
         }
     }
 }

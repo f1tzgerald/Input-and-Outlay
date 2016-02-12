@@ -4,6 +4,17 @@ C:\Users\Виталий\Documents\Visual Studio 2015\Projects\BelarusianDoorData
 C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\BelarusianDoor\bin\Debug\BelarusianDoor.exe.config
 C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\BelarusianDoor\obj\Debug\BelarusianDoor.exe
 C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\BelarusianDoor\obj\Debug\BelarusianDoor.pdb
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\bin\Debug\BelarusianDoor.exe
 C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\bin\Debug\BelarusianDoor.exe.config
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\obj\Debug\BelarusianDoor.Form1.resources
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\obj\Debug\BelarusianDoor.Properties.Resources.resources
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\obj\Debug\Input and Outlay.csproj.GenerateResource.Cache
 C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\obj\Debug\BelarusianDoor.exe
 C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\obj\Debug\BelarusianDoor.pdb
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\bin\Debug\BelarusianDoor.pdb
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\obj\Debug\Input and Outlay.csprojResolveAssemblyReference.cache
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\bin\Debug\BelarusianDoor.exe.manifest
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\bin\Debug\BelarusianDoor.application
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\obj\Debug\BelarusianDoor.exe.manifest
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\obj\Debug\BelarusianDoor.application
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\bin\Debug\Microsoft.Office.Interop.Excel.dll

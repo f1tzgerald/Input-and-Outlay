@@ -1,0 +1,14 @@
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\bin\Release\BelarusianDoor.exe
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\bin\Release\BelarusianDoor.exe.config
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\obj\Release\BelarusianDoor.Form1.resources
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\obj\Release\BelarusianDoor.Properties.Resources.resources
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\obj\Release\Input and Outlay.csproj.GenerateResource.Cache
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\obj\Release\BelarusianDoor.exe
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\obj\Release\BelarusianDoor.pdb
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\bin\Release\BelarusianDoor.pdb
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\obj\Release\Input and Outlay.csprojResolveAssemblyReference.cache
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\bin\Release\BelarusianDoor.exe.manifest
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\bin\Release\BelarusianDoor.application
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\bin\Release\Microsoft.Office.Interop.Excel.dll
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\obj\Release\BelarusianDoor.exe.manifest
+C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\obj\Release\BelarusianDoor.application
