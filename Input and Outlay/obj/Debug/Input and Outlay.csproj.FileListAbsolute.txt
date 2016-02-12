@@ -18,3 +18,20 @@ C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\I
 C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\obj\Debug\BelarusianDoor.exe.manifest
 C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\obj\Debug\BelarusianDoor.application
 C:\Users\Виталий\Documents\Visual Studio 2015\Projects\Input and Outlay\Input and Outlay\bin\Debug\Microsoft.Office.Interop.Excel.dll
+D:\Visual Studio Projects\Input-and-Outlay\Input and Outlay\obj\Debug\Input and Outlay.csprojResolveAssemblyReference.cache
+D:\Visual Studio Projects\Input-and-Outlay\Input and Outlay\obj\Debug\BelarusianDoor.Form1.resources
+D:\Visual Studio Projects\Input-and-Outlay\Input and Outlay\obj\Debug\BelarusianDoor.Properties.Resources.resources
+D:\Visual Studio Projects\Input-and-Outlay\Input and Outlay\obj\Debug\Input and Outlay.csproj.GenerateResource.Cache
+D:\Visual Studio Projects\Input-and-Outlay\Input and Outlay\obj\Debug\BelarusianDoor.exe
+D:\Visual Studio Projects\Input-and-Outlay\Input and Outlay\obj\Debug\BelarusianDoor.pdb
+D:\Visual Studio Projects\Input-and-Outlay\Input and Outlay\bin\Debug\BelarusianDoor.exe.config
+D:\Visual Studio Projects\Input-and-Outlay\Input and Outlay\bin\Debug\BelarusianDoor.exe.manifest
+D:\Visual Studio Projects\Input-and-Outlay\Input and Outlay\bin\Debug\BelarusianDoor.application
+D:\Visual Studio Projects\Input-and-Outlay\Input and Outlay\bin\Debug\BelarusianDoor.exe
+D:\Visual Studio Projects\Input-and-Outlay\Input and Outlay\bin\Debug\BelarusianDoor.pdb
+D:\Visual Studio Projects\Input-and-Outlay\Input and Outlay\bin\Debug\EntityFramework.dll
+D:\Visual Studio Projects\Input-and-Outlay\Input and Outlay\bin\Debug\EntityFramework.SqlServer.dll
+D:\Visual Studio Projects\Input-and-Outlay\Input and Outlay\bin\Debug\EntityFramework.xml
+D:\Visual Studio Projects\Input-and-Outlay\Input and Outlay\bin\Debug\EntityFramework.SqlServer.xml
+D:\Visual Studio Projects\Input-and-Outlay\Input and Outlay\obj\Debug\BelarusianDoor.exe.manifest
+D:\Visual Studio Projects\Input-and-Outlay\Input and Outlay\obj\Debug\BelarusianDoor.application

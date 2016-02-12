@@ -2,6 +2,7 @@
 using System.Data;
 using System.Windows.Forms;
 using System.Data.OleDb;
+using BelarusianDoor.Data;
 
 namespace BelarusianDoor
 {
@@ -30,6 +31,8 @@ namespace BelarusianDoor
 
                 connection.ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\DOORS\BelarussianDoor.accdb; Persist Security Info = False; ";
 
+                initializedb();
+
                 AutoFillComboBox();
 
                 LoadTables();
@@ -42,6 +45,27 @@ namespace BelarusianDoor
                 MessageBox.Show(ex.ToString(), "Ошибка");
             }
 
+        }
+
+        private void initializedb()
+        {
+            using (MainContext db = new MainContext())
+            {    
+                Employee employee1 = new Employee() { EmployeeName = "Матвієнко О.М.", Status = true };
+                Employee employee2 = new Employee() { EmployeeName = "Коваль О.С.", Status = true };
+                Employee employee3 = new Employee() { EmployeeName = "Дроздова В.С.", Status = true };
+
+                IncomeMoney incomeMoney1 = new IncomeMoney() { DateTimeIn = DateTime.Today.Date, CustomersName = "Мріщук", Summa = 50, EmployeeId = 1 };
+
+                OutlayMoney outlay = new OutlayMoney() { DateTimeOut = DateTime.Today.Date, Summa = 20, WhereSpend = "Вода на салон", WhoReceiveMoney = "Дроздова" };
+
+                Visitor visitor1 = new Visitor() { DateTime = DateTime.Today.Date, VisitorsCount = 3 };
+
+                db.Visitors.Add(visitor1);
+                db.Employee.Add(employee1);db.Employee.Add(employee2);db.Employee.Add(employee3);
+                db.Income.Add(incomeMoney1);
+                db.Outlay.Add(outlay);
+            }
         }
 
         /// <summary>
@@ -120,7 +144,7 @@ namespace BelarusianDoor
             try
             {
                 CreateExcelFile newExcelFile = new CreateExcelFile(dateTimePicker1.Value, dataGridView1, dataGridView2);
-                newExcelFile.MakeExcelAndPdfFiles(BalanceYesterday(), SetBalanceToday());
+                newExcelFile.MakeExcelAndPdfFiles(/*BalanceYesterday()*/5, SetBalanceToday());
             }
             catch (Exception ex)
             {
@@ -460,7 +484,7 @@ namespace BelarusianDoor
         /// </summary>
         internal double SetBalanceToday()
         {
-            return BalanceYesterday() + SetMoneyInputToday() - SetMoneyOutlayToday();
+            return /*BalanceYesterday() +*/ SetMoneyInputToday() - SetMoneyOutlayToday();
         }
 
         /// <summary>
