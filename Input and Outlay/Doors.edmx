@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DoorsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Balance">
+          <Key>
+            <PropertyRef Name="Date" />
+          </Key>
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="SummaInTheMorning" Type="money" Nullable="false" />
+          <Property Name="SummaInTheEvening" Type="money" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="text" Nullable="false" />
+          <Property Name="Status" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="IncomeMoney">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DateIn" Type="datetime" Nullable="false" />
+          <Property Name="Customer" Type="text" Nullable="false" />
+          <Property Name="Summa" Type="money" Nullable="false" />
+          <Property Name="EmployeeId" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OutlayMoney">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DateOut" Type="datetime" Nullable="false" />
+          <Property Name="WhereSpend" Type="text" Nullable="false" />
+          <Property Name="Summa" Type="money" Nullable="false" />
+          <Property Name="WhoReceive" Type="text" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Visitors">
+          <Key>
+            <PropertyRef Name="DateTime" />
+          </Key>
+          <Property Name="DateTime" Type="datetime" Nullable="false" />
+          <Property Name="VisitorsCount" Type="int" />
+        </EntityType>
+        <Association Name="FK_IncomeMoney_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="IncomeMoney" Type="Self.IncomeMoney" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="IncomeMoney">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DoorsModelStoreContainer">
+          <EntitySet Name="Balance" EntityType="Self.Balance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IncomeMoney" EntityType="Self.IncomeMoney" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OutlayMoney" EntityType="Self.OutlayMoney" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Visitors" EntityType="Self.Visitors" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_IncomeMoney_Employee" Association="Self.FK_IncomeMoney_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="IncomeMoney" EntitySet="IncomeMoney" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DoorsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Balance">
+          <Key>
+            <PropertyRef Name="Date" />
+          </Key>
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SummaInTheMorning" Type="Decimal" Nullable="false" />
+          <Property Name="SummaInTheEvening" Type="Decimal" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="IncomeMoneys" Relationship="Self.FK_IncomeMoney_Employee" FromRole="Employee" ToRole="IncomeMoney" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="IncomeMoney">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DateIn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Customer" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Summa" Type="Decimal" Nullable="false" />
+          <Property Name="EmployeeId" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_IncomeMoney_Employee" FromRole="IncomeMoney" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="OutlayMoney">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DateOut" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="WhereSpend" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Summa" Type="Decimal" Nullable="false" />
+          <Property Name="WhoReceive" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Visitor">
+          <Key>
+            <PropertyRef Name="DateTime" />
+          </Key>
+          <Property Name="DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="VisitorsCount" Type="Int32" />
+        </EntityType>
+        <Association Name="FK_IncomeMoney_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="IncomeMoney" Type="Self.IncomeMoney" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="IncomeMoney">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DoorsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Balances" EntityType="Self.Balance" />
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
+          <EntitySet Name="IncomeMoneys" EntityType="Self.IncomeMoney" />
+          <EntitySet Name="OutlayMoneys" EntityType="Self.OutlayMoney" />
+          <EntitySet Name="Visitors" EntityType="Self.Visitor" />
+          <AssociationSet Name="FK_IncomeMoney_Employee" Association="Self.FK_IncomeMoney_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="IncomeMoney" EntitySet="IncomeMoneys" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DoorsModelStoreContainer" CdmEntityContainer="DoorsEntities">
+          <EntitySetMapping Name="Balances">
+            <EntityTypeMapping TypeName="DoorsModel.Balance">
+              <MappingFragment StoreEntitySet="Balance">
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="SummaInTheMorning" ColumnName="SummaInTheMorning" />
+                <ScalarProperty Name="SummaInTheEvening" ColumnName="SummaInTheEvening" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="DoorsModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IncomeMoneys">
+            <EntityTypeMapping TypeName="DoorsModel.IncomeMoney">
+              <MappingFragment StoreEntitySet="IncomeMoney">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DateIn" ColumnName="DateIn" />
+                <ScalarProperty Name="Customer" ColumnName="Customer" />
+                <ScalarProperty Name="Summa" ColumnName="Summa" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OutlayMoneys">
+            <EntityTypeMapping TypeName="DoorsModel.OutlayMoney">
+              <MappingFragment StoreEntitySet="OutlayMoney">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DateOut" ColumnName="DateOut" />
+                <ScalarProperty Name="WhereSpend" ColumnName="WhereSpend" />
+                <ScalarProperty Name="Summa" ColumnName="Summa" />
+                <ScalarProperty Name="WhoReceive" ColumnName="WhoReceive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Visitors">
+            <EntityTypeMapping TypeName="DoorsModel.Visitor">
+              <MappingFragment StoreEntitySet="Visitors">
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+                <ScalarProperty Name="VisitorsCount" ColumnName="VisitorsCount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

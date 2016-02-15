@@ -571,7 +571,6 @@ namespace BelarusianDoor
             this.MinimumSize = new System.Drawing.Size(1114, 665);
             this.Name = "Form1";
             this.Text = "Баланс надходжень і витрат";
-            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.groupBox1.ResumeLayout(false);

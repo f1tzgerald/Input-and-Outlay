@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DoorsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Balance">
+    <Key>
+      <PropertyRef Name="Date" />
+    </Key>
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="SummaInTheMorning" Type="Decimal" Nullable="false" />
+    <Property Name="SummaInTheEvening" Type="Decimal" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Status" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="IncomeMoneys" Relationship="Self.FK_IncomeMoney_Employee" FromRole="Employee" ToRole="IncomeMoney" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="IncomeMoney">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DateIn" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Customer" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Summa" Type="Decimal" Nullable="false" />
+    <Property Name="EmployeeId" Type="Int16" Nullable="false" />
+    <NavigationProperty Name="Employee" Relationship="Self.FK_IncomeMoney_Employee" FromRole="IncomeMoney" ToRole="Employee" />
+  </EntityType>
+  <EntityType Name="OutlayMoney">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DateOut" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="WhereSpend" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Summa" Type="Decimal" Nullable="false" />
+    <Property Name="WhoReceive" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Visitor">
+    <Key>
+      <PropertyRef Name="DateTime" />
+    </Key>
+    <Property Name="DateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="VisitorsCount" Type="Int32" />
+  </EntityType>
+  <Association Name="FK_IncomeMoney_Employee">
+    <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+    <End Role="IncomeMoney" Type="Self.IncomeMoney" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="IncomeMoney">
+        <PropertyRef Name="EmployeeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DoorsEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Balances" EntityType="Self.Balance" />
+    <EntitySet Name="Employees" EntityType="Self.Employee" />
+    <EntitySet Name="IncomeMoneys" EntityType="Self.IncomeMoney" />
+    <EntitySet Name="OutlayMoneys" EntityType="Self.OutlayMoney" />
+    <EntitySet Name="Visitors" EntityType="Self.Visitor" />
+    <AssociationSet Name="FK_IncomeMoney_Employee" Association="Self.FK_IncomeMoney_Employee">
+      <End Role="Employee" EntitySet="Employees" />
+      <End Role="IncomeMoney" EntitySet="IncomeMoneys" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

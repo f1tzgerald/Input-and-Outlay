@@ -39,7 +39,7 @@ namespace BelarusianDoor
         /// <summary>
         /// Сохраняем файлы в формате пдф и ексель в папки
         /// </summary>
-        public void MakeExcelAndPdfFiles(double moneyAtStart, double moneyBalance)
+        public void MakeExcelAndPdfFiles(decimal moneyAtStart, decimal moneyBalance)
         {
             // Перевіряємо чи є папка року (2015/2016/2017)
             string directoryFolder = "D:\\ExcelFilesDveriBelorusii\\excel\\" + yearInput;
@@ -429,7 +429,7 @@ namespace BelarusianDoor
         /// <summary>
         /// Заповнюємо інформаційні поля
         /// </summary>
-        private void InputInformationFields(double moneyAtStart, double moneyBalance)
+        private void InputInformationFields(decimal moneyAtStart, decimal moneyBalance)
         {
             // Кількість грошей, що залишилася:
             oCells = oSheet.Range["E5", "F5"];

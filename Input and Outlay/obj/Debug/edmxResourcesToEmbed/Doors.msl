@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DoorsModelStoreContainer" CdmEntityContainer="DoorsEntities">
+    <EntitySetMapping Name="Balances">
+      <EntityTypeMapping TypeName="DoorsModel.Balance">
+        <MappingFragment StoreEntitySet="Balance">
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="SummaInTheMorning" ColumnName="SummaInTheMorning" />
+          <ScalarProperty Name="SummaInTheEvening" ColumnName="SummaInTheEvening" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Employees">
+      <EntityTypeMapping TypeName="DoorsModel.Employee">
+        <MappingFragment StoreEntitySet="Employee">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="IncomeMoneys">
+      <EntityTypeMapping TypeName="DoorsModel.IncomeMoney">
+        <MappingFragment StoreEntitySet="IncomeMoney">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="DateIn" ColumnName="DateIn" />
+          <ScalarProperty Name="Customer" ColumnName="Customer" />
+          <ScalarProperty Name="Summa" ColumnName="Summa" />
+          <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OutlayMoneys">
+      <EntityTypeMapping TypeName="DoorsModel.OutlayMoney">
+        <MappingFragment StoreEntitySet="OutlayMoney">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="DateOut" ColumnName="DateOut" />
+          <ScalarProperty Name="WhereSpend" ColumnName="WhereSpend" />
+          <ScalarProperty Name="Summa" ColumnName="Summa" />
+          <ScalarProperty Name="WhoReceive" ColumnName="WhoReceive" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Visitors">
+      <EntityTypeMapping TypeName="DoorsModel.Visitor">
+        <MappingFragment StoreEntitySet="Visitors">
+          <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+          <ScalarProperty Name="VisitorsCount" ColumnName="VisitorsCount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

@@ -3,35 +3,17 @@ using System.Data;
 using System.Windows.Forms;
 using System.Data.OleDb;
 using BelarusianDoor.Data;
+using System.Linq;
 
 namespace BelarusianDoor
 {
     public partial class Form1 : Form
     {
-        OleDbConnection connection = new OleDbConnection();
-        OleDbDataAdapter dataAdapter = new OleDbDataAdapter();
-        DataSet dataSet = new DataSet();
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Ошибка");
-            }
-        }
-
         public Form1()
         {
             try
             {
                 InitializeComponent();
-
-                connection.ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\DOORS\BelarussianDoor.accdb; Persist Security Info = False; ";
-
-                initializedb();
 
                 AutoFillComboBox();
 
@@ -45,27 +27,6 @@ namespace BelarusianDoor
                 MessageBox.Show(ex.ToString(), "Ошибка");
             }
 
-        }
-
-        private void initializedb()
-        {
-            using (MainContext db = new MainContext())
-            {    
-                Employee employee1 = new Employee() { EmployeeName = "Матвієнко О.М.", Status = true };
-                Employee employee2 = new Employee() { EmployeeName = "Коваль О.С.", Status = true };
-                Employee employee3 = new Employee() { EmployeeName = "Дроздова В.С.", Status = true };
-
-                IncomeMoney incomeMoney1 = new IncomeMoney() { DateTimeIn = DateTime.Today.Date, CustomersName = "Мріщук", Summa = 50, EmployeeId = 1 };
-
-                OutlayMoney outlay = new OutlayMoney() { DateTimeOut = DateTime.Today.Date, Summa = 20, WhereSpend = "Вода на салон", WhoReceiveMoney = "Дроздова" };
-
-                Visitor visitor1 = new Visitor() { DateTime = DateTime.Today.Date, VisitorsCount = 3 };
-
-                db.Visitors.Add(visitor1);
-                db.Employee.Add(employee1);db.Employee.Add(employee2);db.Employee.Add(employee3);
-                db.Income.Add(incomeMoney1);
-                db.Outlay.Add(outlay);
-            }
         }
 
         /// <summary>
@@ -108,7 +69,6 @@ namespace BelarusianDoor
         /// </summary>
         private void ClearIncomeTextBoxes()
         {
-            // Income textboxes
             textBox_Summ1.Clear();
             textBox_WhoGive1.Clear();
             comboBox_whoReceive1.SelectedIndex = -1;
@@ -120,7 +80,6 @@ namespace BelarusianDoor
         /// </summary>
         private void ClearOutlayTextBoxes()
         {
-            // Outlay textboxes
             textBox_SummaOutlay.Clear();
             textBox_WhereMoneyGoes.Clear();
             textBox_WhomeReceiveMoney.Clear();
@@ -161,26 +120,46 @@ namespace BelarusianDoor
         /// </summary>
         private void LoadIncomeTableInGridView()
         {
-            string query = "SELECT Income.Summa, Income.WhoGiveMoney, Income.EmployeeId, Employee.FullName, Income.Id FROM Income ";
-            query += "INNER JOIN Employee ON Income.EmployeeId = Employee.Id WHERE DateIncome = @SelectedDate";
+            using (var db = new DoorsEntities())
+            {
+                var query = from s in db.IncomeMoneys
+                            where s.DateIn == dateTimePicker1.Value.Date
+                            join prod in db.Employees on s.EmployeeId equals prod.Id                            
+                            select new
+                            { Summa = s.Summa, Customer = s.Customer, Employee=prod.Name, Id=s.Id, EmployeeId=s.EmployeeId, DateIn=s.DateIn };
 
-            dataAdapter.SelectCommand = new OleDbCommand(query, connection);
+                if (query == null)
+                    return;
 
-            dataAdapter.SelectCommand.Parameters.AddWithValue("@SelectedDate", dateTimePicker1.Value.Date);
+                var notices = query.ToList();
 
-            // Заповнюмо ds даними запроса і відображаємо в dgv
-            if (dataSet.Tables["IncomeTableInnerEmployee"] != null)
-                dataSet.Tables["IncomeTableInnerEmployee"].Clear();
+                dataGridView1.DataSource = notices;
+            }
 
-            dataAdapter.Fill(dataSet, "IncomeTableInnerEmployee");
-            dataGridView1.DataSource = dataSet.Tables["IncomeTableInnerEmployee"];
-
+            dataGridView1.Columns["DateIn"].Visible = false;
             dataGridView1.Columns["EmployeeId"].Visible = false;
-            dataGridView1.AutoResizeColumns();
-
             dataGridView1.Columns["Summa"].HeaderText = "Сума";
-            dataGridView1.Columns["WhoGiveMoney"].HeaderText = "Від кого поступили";
-            dataGridView1.Columns["FullName"].HeaderText = "Хто отримав";
+            dataGridView1.Columns["Customer"].HeaderText = "Від кого поступили";
+            dataGridView1.Columns["Employee"].HeaderText = "Хто отримав";
+            dataGridView1.AutoResizeColumns();
+        }
+
+        /// <summary>
+        /// Заповнення комбобоксів даними з БД
+        /// </summary>
+        private void AutoFillComboBox()
+        {
+            using (DoorsEntities db = new DoorsEntities())
+            {
+                var query = from s in db.Employees
+                            where s.Status == true
+                            select s.Name;
+
+                foreach (var item in query)
+                {
+                    comboBox_whoReceive1.Items.Add(item.ToString());
+                }
+            }
         }
 
         /// <summary>
@@ -191,29 +170,18 @@ namespace BelarusianDoor
             if (!ValidateInputFieldsInIncome())
                 return;
 
-            dataAdapter.InsertCommand = new OleDbCommand();
-            dataAdapter.InsertCommand.Connection = connection;
-            dataAdapter.InsertCommand.CommandText =
-                "INSERT INTO Income (DateIncome, Summa, WhoGiveMoney, EmployeeId) VALUES (@SelectedDate, @Summa, @WhoGiveMoney, @EmployeeId)";
-            dataAdapter.InsertCommand.Parameters.Add("@SelectedDate", OleDbType.Date).Value = dateTimePicker1.Value.Date;
-            dataAdapter.InsertCommand.Parameters.Add("@Summa", OleDbType.Double).Value = Convert.ToDouble(textBox_Summ1.Text);
-            dataAdapter.InsertCommand.Parameters.Add("@WhoGiveMoney", OleDbType.VarChar).Value = textBox_WhoGive1.Text;
-            dataAdapter.InsertCommand.Parameters.Add("@EmployeeId", OleDbType.UnsignedTinyInt).Value = comboBox_whoReceive1.SelectedIndex + 1;            
-            
-            try
+            IncomeMoney notice = new IncomeMoney()
             {
-                connection.Open();
-                dataAdapter.InsertCommand.ExecuteNonQuery();
-                connection.Close();
-            }
-            catch (Exception ex)
+                DateIn = dateTimePicker1.Value.Date,
+                Summa = Convert.ToDecimal(textBox_Summ1.Text),
+                Customer = textBox_WhoGive1.Text,
+                EmployeeId = (short) (comboBox_whoReceive1.SelectedIndex + 1)
+            };
+
+            using (DoorsEntities db = new DoorsEntities())
             {
-                MessageBox.Show("Error " + ex.ToString());
-            }
-            finally
-            {
-                if (connection.State != ConnectionState.Closed)
-                    connection.Close();
+                db.IncomeMoneys.Add(notice);    // додаємо запис
+                db.SaveChanges();               // зберігаємо таблицю
             }
 
             // Оновлюємо view
@@ -229,31 +197,20 @@ namespace BelarusianDoor
             if (!ValidateInputFieldsInIncome() || textBox_id1.Text == "")
                 return;
 
-            dataAdapter.UpdateCommand = new OleDbCommand();
-            dataAdapter.UpdateCommand.Connection = connection;
+            uint id = Convert.ToUInt32(textBox_id1.Text);
 
-            string query = "UPDATE Income SET DateIncome = @SelectedDate, Summa = @Summa, WhoGiveMoney = @WhoGiveMoney, EmployeeId = @EmployeeId WHERE Id=@Id";
-            dataAdapter.UpdateCommand.CommandText = query;
-            dataAdapter.UpdateCommand.Parameters.Add("@SelectedDate", OleDbType.Date).Value = dateTimePicker1.Value.Date;
-            dataAdapter.UpdateCommand.Parameters.Add("@Summa", OleDbType.Double).Value = Convert.ToDouble(textBox_Summ1.Text);
-            dataAdapter.UpdateCommand.Parameters.Add("@WhoGiveMoney", OleDbType.VarChar).Value = textBox_WhoGive1.Text;
-            dataAdapter.UpdateCommand.Parameters.Add("@EmployeeId", OleDbType.UnsignedTinyInt).Value = comboBox_whoReceive1.SelectedIndex + 1;
-            dataAdapter.UpdateCommand.Parameters.Add("@Id", OleDbType.Integer).Value = Convert.ToInt32(textBox_id1.Text);
+            using (DoorsEntities db = new DoorsEntities())
+            {
+                var notice = db.IncomeMoneys.FirstOrDefault(n => n.Id == id);
 
-            try
-            {
-                connection.Open();
-                dataAdapter.UpdateCommand.ExecuteNonQuery();
-                connection.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error " + ex.ToString());
-            }
-            finally
-            {
-                if (connection.State != ConnectionState.Closed)
-                    connection.Close();
+                if (notice != null)
+                {
+                    notice.DateIn = dateTimePicker1.Value.Date;
+                    notice.Summa = Convert.ToDecimal(textBox_Summ1.Text);
+                    notice.Customer = textBox_WhoGive1.Text;
+                    notice.EmployeeId = (short) (comboBox_whoReceive1.SelectedIndex + 1);
+                    db.SaveChanges();
+                }
             }
 
             // Refresh view
@@ -269,29 +226,22 @@ namespace BelarusianDoor
             if (textBox_id1.Text == "")
                 return;
 
-            dataAdapter.DeleteCommand = new OleDbCommand();
-            dataAdapter.DeleteCommand.Connection = connection;
-            dataAdapter.DeleteCommand.CommandText = "DELETE FROM Income WHERE Id=@Id";
-            dataAdapter.DeleteCommand.Parameters.Add("@Id", OleDbType.Numeric).Value = textBox_id1.Text;
+            int idToDel = Convert.ToInt32(textBox_id1.Text);
 
-            try
+            using (var db = new DoorsEntities())
             {
-                connection.Open();
+                IncomeMoney notice = db.IncomeMoneys
+                                    .Where(p => p.Id == idToDel)
+                                    .FirstOrDefault();
+
+                db.IncomeMoneys.Remove(notice);
+
                 DialogResult dr;
                 dr = MessageBox.Show("Ви впевнені, що хочете видалити даний запис", "Видалити запис?", MessageBoxButtons.OKCancel);
                 if (dr == DialogResult.OK)
-                    dataAdapter.DeleteCommand.ExecuteNonQuery();
-                connection.Close();
+                    db.SaveChanges();
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error " + ex.ToString());
-            }
-            finally
-            {
-                if (connection.State != ConnectionState.Closed)
-                    connection.Close();
-            }
+
             // Refresh view
             LoadIncomeTableInGridView();
             CalculateDayBalance();
@@ -321,29 +271,6 @@ namespace BelarusianDoor
         }
 
         /// <summary>
-        /// Заповнення комбобоксів даними з БД
-        /// </summary>
-        private void AutoFillComboBox()
-        {
-            try
-            {
-                string query = "SELECT FullName FROM Employee WHERE WorkStatus = true";
-                dataAdapter.SelectCommand = new OleDbCommand(query, connection);
-
-                dataAdapter.Fill(dataSet, "Employee_Table");
-                for (int i = 0; i < dataSet.Tables["Employee_Table"].Rows.Count; i++)
-                {
-                    // Додаємо значення з колонки повного імені в комбобокс
-                    comboBox_whoReceive1.Items.Add(dataSet.Tables["Employee_Table"].Rows[i]["FullName"]).ToString();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error " + ex.ToString());
-            }
-        }
-
-        /// <summary>
         /// Відображення значень відповідної виділеної стрічки в відповідних TextBox'ax таблиці Надходжень
         /// </summary>
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -354,12 +281,11 @@ namespace BelarusianDoor
                 if (e.RowIndex == -1)
                     return;
 
-                DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
-                textBox_id1.Text = dataSet.Tables["IncomeTableInnerEmployee"].Rows[e.RowIndex]["Id"].ToString();
-                textBox_Summ1.Text = dataSet.Tables["IncomeTableInnerEmployee"].Rows[e.RowIndex]["Summa"].ToString();
-                textBox_WhoGive1.Text = dataSet.Tables["IncomeTableInnerEmployee"].Rows[e.RowIndex]["WhoGiveMoney"].ToString();
+                textBox_id1.Text = dataGridView1["Id", e.RowIndex].Value.ToString();
+                textBox_WhoGive1.Text = dataGridView1["Customer", e.RowIndex].Value.ToString();
+                textBox_Summ1.Text = dataGridView1["Summa", e.RowIndex].Value.ToString();
 
-                int num = Convert.ToInt32(dataSet.Tables["IncomeTableInnerEmployee"].Rows[e.RowIndex]["EmployeeId"]) - 1;
+                int num = Convert.ToInt32(dataGridView1["EmployeeId", e.RowIndex].Value) - 1;
                 comboBox_whoReceive1.SelectedIndex = num;
             }
             catch (Exception ex)
@@ -373,118 +299,43 @@ namespace BelarusianDoor
         #region Окремі інформативні поля 
 
         /// <summary>
-        /// Розрахунок суми, що залишилась ввечері минулого дня
-        /// </summary>
-        //double BalanceYesterday()
-        //{
-        //    // Значення суми
-        //    double inputSumma = 0;
-        //    double outlaySumma = 0;
-
-        //    DateTime yesterday = dateTimePicker1.Value;
-        //    yesterday = yesterday.Date.AddDays(-1);
-
-        //    try
-        //    {
-        //        connection.Open();
-
-        //        OleDbCommand command = new OleDbCommand();
-        //        command.Connection = connection;
-        //        command.CommandText = "SELECT SUM(Summa) FROM Income WHERE DateIncome = @SelectedDate";
-        //        command.Parameters.AddWithValue("@SelectedDate", yesterday);
-        //        var s = command.ExecuteScalar();
-                
-        //        if (!(s is DBNull))
-        //            inputSumma = Convert.ToDouble(s);
-                
-        //        command.CommandText = "SELECT SUM(ValueMoney) FROM Outlay WHERE DateOutlay = @SelectedDate";
-        //        command.Parameters.AddWithValue("@SelectedDate", yesterday);
-        //        var s1 = command.ExecuteScalar();
-        //        if (!(s1 is DBNull))
-        //            outlaySumma = Convert.ToDouble(s1);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show("Error " + ex.ToString());
-        //    }
-        //    finally
-        //    {
-        //        connection.Close();
-        //    }
-
-        //    return inputSumma - outlaySumma; 
-        //}
-        
-        /// <summary>
         /// Розрахунок загальної суми внесених грошей за день
         /// </summary>
-        internal double SetMoneyInputToday()
+        internal decimal SetMoneyInputToday()
         {
-            // Загальна сума внесених грошей
-            double inputToday = 0;
-            try
+            decimal summaInput = 0;
+            using (DoorsEntities db = new DoorsEntities())
             {
-                connection.Open();
-
-                OleDbCommand command = new OleDbCommand();
-                command.Connection = connection;
-
-                command.CommandText = "SELECT SUM(Summa) FROM Income WHERE DateIncome = @SelectedDate";
-                command.Parameters.AddWithValue("@SelectedDate", dateTimePicker1.Value.Date);
-
-                var s = command.ExecuteScalar();
-                if (!(s is DBNull))
-                    inputToday = Convert.ToDouble(s);                
+                var query = db.IncomeMoneys.Where(p => p.DateIn == dateTimePicker1.Value.Date)
+                                            .Sum(p => p.Summa)
+                                            .GetValueOrDefault(0);
+                summaInput = query;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error " + ex.ToString());
-            }
-            finally
-            {
-                connection.Close();
-            }
-            return inputToday;
+            return summaInput;
         }
 
         /// <summary>
         /// Розрахунок загальної суми витрачених грошей за день
         /// </summary>
-        internal double SetMoneyOutlayToday()
+        internal decimal SetMoneyOutlayToday()
         {
-            // Сума витрачених грошей за день
-            double outlayToday = 0;
-
-            try
+            decimal summaOut = 0;
+            using (DoorsEntities db = new DoorsEntities())
             {
-                connection.Open();
-
-                OleDbCommand command = new OleDbCommand();
-                command.Connection = connection;
-
-                command.CommandText = "SELECT SUM(ValueMoney) FROM Outlay WHERE DateOutlay = @SelectedDate";
-                command.Parameters.AddWithValue("@SelectedDate", dateTimePicker1.Value.Date);
-
-                var s = command.ExecuteScalar();
-                if (!(s is DBNull))
-                    outlayToday = Convert.ToDouble(s);
-
-                connection.Close();
+                var query = db.OutlayMoneys.Where(p => p.DateOut == dateTimePicker1.Value.Date)
+                                          .Sum(p => p.Summa)
+                                          .GetValueOrDefault(0);
+                summaOut = query;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error " + ex.ToString());
-            }
-
-            return outlayToday;
+            return summaOut;
         }
 
         /// <summary>
         /// Розрахунок денного балансу
         /// </summary>
-        internal double SetBalanceToday()
+        internal decimal SetBalanceToday()
         {
-            return /*BalanceYesterday() +*/ SetMoneyInputToday() - SetMoneyOutlayToday();
+            return SetMoneyInputToday() - SetMoneyOutlayToday();
         }
 
         /// <summary>
@@ -492,7 +343,6 @@ namespace BelarusianDoor
         /// </summary>
         private void CalculateDayBalance()
         {
-            //BalanceYesterday();
             SetMoneyInputToday();
             SetMoneyOutlayToday();
             SetBalanceToday();
@@ -516,32 +366,25 @@ namespace BelarusianDoor
         /// </summary>
         private void LoadOutlayTableToGridView()
         {
-            try
+            using (var db = new DoorsEntities())
             {
-                string query = "SELECT ValueMoney, WhereMoneyPut, WhomReceiveMoney, Id FROM Outlay WHERE DateOutlay = @SelectedDate";
+                var query = from s in db.OutlayMoneys
+                            where s.DateOut == dateTimePicker1.Value.Date
+                            select s;
 
-                dataAdapter.SelectCommand = new OleDbCommand(query, connection);
-                
-                dataAdapter.SelectCommand.Parameters.AddWithValue("@SelectedDate", dateTimePicker1.Value.Date);
+                if (query == null)
+                    return;
 
-                // Заповнюмо ds даними запроса і відображаємо в dgv
-                if (dataSet.Tables["OutlayTable"] != null)
-                    dataSet.Tables["OutlayTable"].Clear();
+                var notices = query.ToList();
 
-                dataAdapter.Fill(dataSet, "OutlayTable");
-                dataGridView2.DataSource = dataSet.Tables["OutlayTable"];
-
-                // Змінюємо в datagridview заголовки колонок
-                dataGridView2.Columns["ValueMoney"].HeaderText = "Сума";
-                dataGridView2.Columns["WhereMoneyPut"].HeaderText = "Куди витрачено";
-                dataGridView2.Columns["WhomReceiveMoney"].HeaderText = "Кому видано";
-
-                dataGridView2.AutoResizeColumns();
+                dataGridView2.DataSource = notices;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error " + ex.ToString());
-            }
+
+            dataGridView2.Columns["DateOut"].Visible = false;
+            dataGridView2.Columns["Summa"].HeaderText = "Сума";
+            dataGridView2.Columns["WhereSpend"].HeaderText = "Куди витрачено";
+            dataGridView2.Columns["WhoReceive"].HeaderText = "Кому видано";
+            dataGridView2.AutoResizeColumns();
         }
 
         /// <summary>
@@ -552,30 +395,20 @@ namespace BelarusianDoor
             if (!ValidateInputFieldsInOutlay())
                 return;
 
-            dataAdapter.InsertCommand = new OleDbCommand();
-            dataAdapter.InsertCommand.Connection = connection;
-            dataAdapter.InsertCommand.CommandText =
-                "INSERT INTO Outlay (DateOutlay, WhereMoneyPut, ValueMoney, WhomReceiveMoney) VALUES (@SelectedDate, @WhereMoneyPut, @ValueMoney, @WhomReceiveMoney)";
-
-            dataAdapter.InsertCommand.Parameters.Add("@SelectedDate", OleDbType.Date).Value = dateTimePicker1.Value.Date;
-            dataAdapter.InsertCommand.Parameters.Add("@WhereMoneyPut", OleDbType.VarChar).Value = textBox_WhereMoneyGoes.Text;
-            dataAdapter.InsertCommand.Parameters.Add("@ValueMoney", OleDbType.Double).Value = Convert.ToDouble(textBox_SummaOutlay.Text);
-            dataAdapter.InsertCommand.Parameters.Add("@WhomReceiveMoney", OleDbType.VarChar).Value = textBox_WhomeReceiveMoney.Text;
-
-            try
+            OutlayMoney notice = new OutlayMoney()
             {
-                connection.Open();
-                dataAdapter.InsertCommand.ExecuteNonQuery();
+                DateOut = dateTimePicker1.Value.Date,
+                Summa = Convert.ToDecimal(textBox_SummaOutlay.Text),                 
+                WhereSpend = textBox_WhereMoneyGoes.Text,
+                WhoReceive = textBox_WhomeReceiveMoney.Text
+            };
+
+            using (DoorsEntities db = new DoorsEntities())
+            {
+                db.OutlayMoneys.Add(notice);    // додаємо запис
+                db.SaveChanges();               // зберігаємо таблицю
             }
 
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error " + ex.ToString());
-            }
-            finally
-            {
-                connection.Close();
-            }
             // Оновлюємо таблицю gridview і перераховуємо денний баланс грошей
             LoadOutlayTableToGridView();
             CalculateDayBalance();
@@ -589,33 +422,22 @@ namespace BelarusianDoor
             if (!ValidateInputFieldsInOutlay() || textBox_idOutlay.Text == "")
                 return;
 
-            dataAdapter.UpdateCommand = new OleDbCommand();
+            uint id = Convert.ToUInt32(textBox_idOutlay.Text);
 
-            string query = "UPDATE Outlay SET DateOutlay = @SelectedDate, WhereMoneyPut = @WhereMoneyPut, ValueMoney = @ValueMoney, WhomReceiveMoney = @WhomReceiveMoney WHERE Id=@Id";
-
-            dataAdapter.UpdateCommand.CommandText = query;
-
-            dataAdapter.UpdateCommand.Parameters.Add("@SelectedDate", OleDbType.Date).Value = dateTimePicker1.Value.Date;
-            dataAdapter.UpdateCommand.Parameters.Add("@WhereMoneyPut", OleDbType.VarChar).Value = textBox_WhereMoneyGoes.Text;
-            dataAdapter.UpdateCommand.Parameters.Add("@ValueMoney", OleDbType.Double).Value = Convert.ToDouble(textBox_SummaOutlay.Text);
-            dataAdapter.UpdateCommand.Parameters.Add("@WhomReceiveMoney", OleDbType.VarChar).Value = textBox_WhomeReceiveMoney.Text;
-            dataAdapter.UpdateCommand.Parameters.Add("@Id", OleDbType.Integer).Value = Convert.ToInt32(textBox_idOutlay.Text);
-
-            dataAdapter.UpdateCommand.Connection = connection;
-
-            try
+            using (DoorsEntities db = new DoorsEntities())
             {
-                connection.Open();
-                dataAdapter.UpdateCommand.ExecuteNonQuery();
+                var notice = db.OutlayMoneys.FirstOrDefault(n => n.Id == id);
+
+                if (notice != null)
+                {
+                    notice.DateOut = dateTimePicker1.Value.Date;
+                    notice.Summa = Convert.ToDecimal(textBox_SummaOutlay.Text);
+                    notice.WhereSpend = textBox_WhereMoneyGoes.Text;
+                    notice.WhoReceive = textBox_WhomeReceiveMoney.Text;
+                    db.SaveChanges();
+                }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error " + ex.ToString());
-            }
-            finally
-            {
-                connection.Close();
-            }
+
             // Refresh view
             LoadOutlayTableToGridView();
             CalculateDayBalance();
@@ -629,27 +451,23 @@ namespace BelarusianDoor
             if (textBox_idOutlay.Text == "")
                 return;
 
-            dataAdapter.DeleteCommand = new OleDbCommand();
-            dataAdapter.DeleteCommand.Connection = connection;
-            dataAdapter.DeleteCommand.CommandText = "DELETE FROM Outlay WHERE Id=@Id";
-            dataAdapter.DeleteCommand.Parameters.Add("@Id", OleDbType.Numeric).Value = textBox_id1.Text;
+            // ID позиції для видалення
+            uint id = Convert.ToUInt32(textBox_idOutlay.Text);
 
-            try
+            using (var db = new DoorsEntities())
             {
-                connection.Open();
+                OutlayMoney notice = db.OutlayMoneys
+                                    .Where(p => p.Id == id)
+                                    .FirstOrDefault();
+
+                db.OutlayMoneys.Remove(notice);
+
                 DialogResult dr;
                 dr = MessageBox.Show("Ви впевнені, що хочете видалити даний запис", "Видалити запис?", MessageBoxButtons.OKCancel);
                 if (dr == DialogResult.OK)
-                    dataAdapter.DeleteCommand.ExecuteNonQuery();
+                    db.SaveChanges();
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error " + ex.ToString());
-            }
-            finally
-            {
-                connection.Close();
-            }
+
             // Оновлюємо таблицю gridview і перераховуємо денний баланс грошей
             LoadOutlayTableToGridView();
             CalculateDayBalance();
@@ -685,11 +503,11 @@ namespace BelarusianDoor
                 // Якщо натискати на назву колонки
                 if (e.RowIndex == -1)
                     return;
-                
-                textBox_idOutlay.Text = dataSet.Tables["OutlayTable"].Rows[e.RowIndex]["Id"].ToString();
-                textBox_WhereMoneyGoes.Text = dataSet.Tables["OutlayTable"].Rows[e.RowIndex]["WhereMoneyPut"].ToString();
-                textBox_SummaOutlay.Text = dataSet.Tables["OutlayTable"].Rows[e.RowIndex]["ValueMoney"].ToString();
-                textBox_WhomeReceiveMoney.Text = dataSet.Tables["OutlayTable"].Rows[e.RowIndex]["WhomReceiveMoney"].ToString();
+
+                textBox_idOutlay.Text = dataGridView2["Id", e.RowIndex].Value.ToString();
+                textBox_WhereMoneyGoes.Text = dataGridView2["WhereSpend", e.RowIndex].Value.ToString();
+                textBox_SummaOutlay.Text = dataGridView2["Summa", e.RowIndex].Value.ToString();
+                textBox_WhomeReceiveMoney.Text = dataGridView2["WhoReceive", e.RowIndex].Value.ToString();
             }
             catch (Exception ex)
             {
@@ -701,31 +519,18 @@ namespace BelarusianDoor
 
         #region Visitors
 
+        /// <summary>
+        /// Відображення кількості відвідувачів за день
+        /// </summary>
         private void LoadVisitors()
         {
             string count = "";
-            try
-            {
-                connection.Open();
 
-                OleDbCommand command = new OleDbCommand();
-                command.Connection = connection;
-
-                string query = "SELECT CountOfVisitors FROM Visitors WHERE DateV = @SelectedDate";
-                command.Parameters.AddWithValue("@SelectedDate", dateTimePicker1.Value.Date);
-
-                command.CommandText = query;
-
-                // Зчитуємо дані
-                int count1 = Convert.ToInt32(command.ExecuteScalar());             
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error " + ex.ToString());
-            }
-            finally
-            {
-                connection.Close();
+            using (DoorsEntities db = new DoorsEntities())
+            {                
+                var query = db.Visitors.Find(dateTimePicker1.Value.Date);
+                if (query != null)
+                    count = query.VisitorsCount.ToString();
             }
 
             // Якщо немає даних в БД, то дозволяємо вводити дані
@@ -742,39 +547,37 @@ namespace BelarusianDoor
             }
         }
 
+        /// <summary>
+        /// Додаємо відвідувачів
+        /// </summary>
         private void btn_AddVisitors_Click(object sender, EventArgs e)
         {
-            try
+            if (textBox_Visitors.Text == "")
+                return;
+
+            using (DoorsEntities db = new DoorsEntities())
             {
-                connection.Open();
+                var note = db.Visitors.FirstOrDefault(v => v.DateTime == dateTimePicker1.Value.Date);
 
-                OleDbCommand command = new OleDbCommand();
-                command.Connection = connection;
+                if (note != null)
+                {
+                    // Якщо запис існує змінюємо кількість відвідувачів
+                    note.VisitorsCount = Convert.ToInt32(textBox_Visitors.Text);
+                    db.Visitors.Add(note);
+                }                    
+                else
+                {
+                    // Якщо записа не існує створюємо нову
+                    var newnote = new Visitor()
+                    {
+                        DateTime = dateTimePicker1.Value.Date,
+                        VisitorsCount = Convert.ToInt32(textBox_Visitors.Text)
+                    };
+                    db.Visitors.Add(newnote);
+                }
 
-                // Видаляємо існуюче значення
-                command.CommandText = "DELETE FROM Visitors WHERE DateV = @SelectedDate";
-                command.Parameters.AddWithValue("@SelectedDate", dateTimePicker1.Value.Date);
-                command.ExecuteNonQuery();
-
-                // Вставляємо нове значення
-                command = new OleDbCommand();
-                string query = "INSERT INTO Visitors (DateV, CountOfVisitors) VALUES (@SelectedDate, @CountOfVisitors)";
-                command.Parameters.AddWithValue("@SelectedDate", dateTimePicker1.Value.Date);
-                command.Parameters.AddWithValue("@CountOfVisitors", Convert.ToUInt32(textBox_Visitors.Text));
-                command.CommandText = query;
-                command.Connection = connection;
-                command.ExecuteNonQuery();
+                db.SaveChanges();
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error " + ex.ToString());
-            }
-            finally
-            {
-                if (connection != null)
-                    connection.Close();
-            }
-
             textBox_Visitors.ReadOnly = true;
         }
 

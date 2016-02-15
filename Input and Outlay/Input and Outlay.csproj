@@ -89,9 +89,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Balance.cs">
+      <DependentUpon>Doors.tt</DependentUpon>
+    </Compile>
     <Compile Include="CreateExcelFile.cs" />
     <Compile Include="Data\Balance.cs" />
     <Compile Include="Data\Employee.cs" />
@@ -99,15 +105,42 @@
     <Compile Include="Data\MainContext.cs" />
     <Compile Include="Data\OutlayMoney.cs" />
     <Compile Include="Data\Visitor.cs" />
+    <Compile Include="Doors.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Doors.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Doors.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Doors.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Doors.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Doors.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Employee.cs">
+      <DependentUpon>Doors.tt</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="IncomeMoney.cs">
+      <DependentUpon>Doors.tt</DependentUpon>
+    </Compile>
     <Compile Include="OnlyNumber.cs" />
+    <Compile Include="OutlayMoney.cs">
+      <DependentUpon>Doors.tt</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Visitor.cs">
+      <DependentUpon>Doors.tt</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -121,6 +154,13 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EntityDeploy Include="Doors.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Doors.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Doors.edmx.diagram">
+      <DependentUpon>Doors.edmx</DependentUpon>
+    </None>
     <None Include="Input and Outlay_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -168,6 +208,21 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Doors.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Doors.edmx</DependentUpon>
+      <LastGenOutput>Doors.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Doors.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Doors.edmx</DependentUpon>
+      <LastGenOutput>Doors.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
