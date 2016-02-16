@@ -1,0 +1,22 @@
+---------------ERROR-------------
+16.02.2016
+---------------BODY--------------
+System.ArgumentOutOfRangeException: Индекс за пределами диапазона. Индекс должен быть положительным числом, а его размер не должен превышать размер коллекции.
+Имя параметра: index
+   в System.Collections.ArrayList.get_Item(Int32 index)
+   в System.Windows.Forms.DataGridViewRowCollection.SharedRow(Int32 rowIndex)
+   в System.Windows.Forms.DataGridViewRowCollection.get_Item(Int32 index)
+   в System.Windows.Forms.DataGridView.get_Item(String columnName, Int32 rowIndex)
+   в BelarusianDoor.Form1.dataGridView2_CellClick(Object sender, DataGridViewCellEventArgs e) в D:\Visual Studio Projects\Input-and-Outlay\Input and Outlay\Form1.cs:строка 505
+------------END    ERROR---------
+---------------ERROR-------------
+16.02.2016
+---------------BODY--------------
+System.ArgumentOutOfRangeException: Индекс за пределами диапазона. Индекс должен быть положительным числом, а его размер не должен превышать размер коллекции.
+Имя параметра: index
+   в System.Collections.ArrayList.get_Item(Int32 index)
+   в System.Windows.Forms.DataGridViewRowCollection.SharedRow(Int32 rowIndex)
+   в System.Windows.Forms.DataGridViewRowCollection.get_Item(Int32 index)
+   в System.Windows.Forms.DataGridView.get_Item(String columnName, Int32 rowIndex)
+   в BelarusianDoor.Form1.dataGridView2_CellClick(Object sender, DataGridViewCellEventArgs e) в D:\Visual Studio Projects\Input-and-Outlay\Input and Outlay\Form1.cs:строка 505
+------------END    ERROR---------

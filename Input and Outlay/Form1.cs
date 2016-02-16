@@ -9,6 +9,8 @@ namespace BelarusianDoor
 {
     public partial class Form1 : Form
     {
+        string logErrorFile;
+
         public Form1()
         {
             try
@@ -16,29 +18,16 @@ namespace BelarusianDoor
                 InitializeComponent();
 
                 AutoFillComboBox();
-
                 LoadTables();
                 CalculateDayBalance();
 
-                TurnOffSortModeInDataGridView();
+                logErrorFile = Application.StartupPath + @"\errorlog.txt";
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString(), "Ошибка");
+                WriteLogErrorFile.WriteInLog(logErrorFile, ex.ToString());
             }
-
-        }
-
-        /// <summary>
-        /// Вимикаємо здатність сортувати в datagridview
-        /// </summary>
-        private void TurnOffSortModeInDataGridView()
-        {
-            foreach (DataGridViewColumn col in dataGridView1.Columns)
-                col.SortMode = DataGridViewColumnSortMode.NotSortable;
-
-            foreach (DataGridViewColumn col in dataGridView2.Columns)
-                col.SortMode = DataGridViewColumnSortMode.NotSortable;
         }
 
         /// <summary>
@@ -56,12 +45,20 @@ namespace BelarusianDoor
         /// </summary>
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
-            LoadTables();
+            try
+            {
+                LoadTables();
 
-            CalculateDayBalance();
+                CalculateDayBalance();
 
-            ClearIncomeTextBoxes();
-            ClearOutlayTextBoxes();
+                ClearIncomeTextBoxes();
+                ClearOutlayTextBoxes();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                WriteLogErrorFile.WriteInLog(logErrorFile, ex.ToString());
+            }
         }
 
         /// <summary>
@@ -103,15 +100,50 @@ namespace BelarusianDoor
             try
             {
                 CreateExcelFile newExcelFile = new CreateExcelFile(dateTimePicker1.Value, dataGridView1, dataGridView2);
-                newExcelFile.MakeExcelAndPdfFiles(/*BalanceYesterday()*/5, SetBalanceToday());
+                newExcelFile.MakeExcelFile(
+                    Convert.ToDecimal(textBox_moneyYesterdayEvening.Text),
+                    Convert.ToDecimal(textBox_dayBalance.Text));
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
+                WriteLogErrorFile.WriteInLog(logErrorFile, ex.ToString());
             }
         }
 
         #endregion Excel
+
+        /// <summary>
+        /// Розрахунок всіх інформативних полів
+        /// </summary>
+        private void CalculateDayBalance()
+        {
+            decimal summaInput, summaOut, moneyInTheMorning, moneyInTheEvening;
+
+            using (DoorsEntities db = new DoorsEntities())
+            {
+                var queryFromIn = db.IncomeMoneys.Where(p => p.DateIn == dateTimePicker1.Value.Date)
+                                            .Sum(p => p.Summa)
+                                            .GetValueOrDefault(0);
+                summaInput = queryFromIn;
+
+                var queryFromOut = db.OutlayMoneys.Where(p => p.DateOut == dateTimePicker1.Value.Date)
+                          .Sum(p => p.Summa)
+                          .GetValueOrDefault(0);
+                summaOut = queryFromOut;
+
+                var queryInTheMorning = db.Balances.Where(p => p.Date == dateTimePicker1.Value.Date).FirstOrDefault();
+                moneyInTheMorning = queryInTheMorning == null ? 0 : queryInTheMorning.SummaInTheMorning;
+
+                var queryInTheEvening = db.Balances.Where(p => p.Date == dateTimePicker1.Value.Date).FirstOrDefault();
+                moneyInTheEvening = queryInTheEvening == null ? 0 : queryInTheEvening.SummaInTheEvening;
+            }
+
+            textBox_summInputToday.Text = summaInput.ToString();
+            textBox_summaOutlayToday.Text = summaOut.ToString();
+            textBox_dayBalance.Text = moneyInTheEvening.ToString();
+            textBox_moneyYesterdayEvening.Text = moneyInTheMorning.ToString();
+        }
 
         #region Таблиця НАдходжень
 
@@ -180,8 +212,23 @@ namespace BelarusianDoor
 
             using (DoorsEntities db = new DoorsEntities())
             {
-                db.IncomeMoneys.Add(notice);    // додаємо запис
-                db.SaveChanges();               // зберігаємо таблицю
+                try
+                {
+                    db.IncomeMoneys.Add(notice);    // додаємо запис
+                    db.SaveChanges();               // зберігаємо таблицю
+                }
+                catch (System.Data.Entity.Infrastructure.DbUpdateException)
+                {
+                    MessageBox.Show("Переконайтесь, що Ви відобразили всі необхідні записи за попередні дні " +
+                                     "або переконайтесь, що вибрана Вами дата вірна.", "Помилка при веденні журналу обліку",
+                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                    WriteLogErrorFile.WriteInLog(logErrorFile, ex.ToString());
+                }
+
             }
 
             // Оновлюємо view
@@ -291,74 +338,11 @@ namespace BelarusianDoor
             catch (Exception ex)
             {
                 MessageBox.Show("Error " + ex.ToString());
+                WriteLogErrorFile.WriteInLog(logErrorFile, ex.ToString());
             }
         }
 
         #endregion Таблиця НАдходжень
-
-        #region Окремі інформативні поля 
-
-        /// <summary>
-        /// Розрахунок загальної суми внесених грошей за день
-        /// </summary>
-        internal decimal SetMoneyInputToday()
-        {
-            decimal summaInput = 0;
-            using (DoorsEntities db = new DoorsEntities())
-            {
-                var query = db.IncomeMoneys.Where(p => p.DateIn == dateTimePicker1.Value.Date)
-                                            .Sum(p => p.Summa)
-                                            .GetValueOrDefault(0);
-                summaInput = query;
-            }
-            return summaInput;
-        }
-
-        /// <summary>
-        /// Розрахунок загальної суми витрачених грошей за день
-        /// </summary>
-        internal decimal SetMoneyOutlayToday()
-        {
-            decimal summaOut = 0;
-            using (DoorsEntities db = new DoorsEntities())
-            {
-                var query = db.OutlayMoneys.Where(p => p.DateOut == dateTimePicker1.Value.Date)
-                                          .Sum(p => p.Summa)
-                                          .GetValueOrDefault(0);
-                summaOut = query;
-            }
-            return summaOut;
-        }
-
-        /// <summary>
-        /// Розрахунок денного балансу
-        /// </summary>
-        internal decimal SetBalanceToday()
-        {
-            return SetMoneyInputToday() - SetMoneyOutlayToday();
-        }
-
-        /// <summary>
-        /// Розрахунок всіх інформативних полів
-        /// </summary>
-        private void CalculateDayBalance()
-        {
-            SetMoneyInputToday();
-            SetMoneyOutlayToday();
-            SetBalanceToday();
-
-            SetInformationFields();
-        }
-
-        private void SetInformationFields()
-        {
-            textBox_summInputToday.Text = SetMoneyInputToday().ToString();
-            textBox_summaOutlayToday.Text = SetMoneyOutlayToday().ToString();
-            textBox_dayBalance.Text = SetBalanceToday().ToString();
-            //textBox_moneyYesterdayEvening.Text = BalanceYesterday().ToString();
-        }
-
-        #endregion Окремі інформативні поля
 
         #region Таблиця ВИТРАТ
         /// <summary>
@@ -405,8 +389,22 @@ namespace BelarusianDoor
 
             using (DoorsEntities db = new DoorsEntities())
             {
-                db.OutlayMoneys.Add(notice);    // додаємо запис
-                db.SaveChanges();               // зберігаємо таблицю
+                try
+                {
+                    db.OutlayMoneys.Add(notice);
+                    db.SaveChanges();
+                }
+                catch (System.Data.Entity.Infrastructure.DbUpdateException)
+                {
+                    MessageBox.Show("Переконайтесь, що Ви відобразили всі необхідні записи за попередні дні " +
+                                     "або переконайтесь, що вибрана Вами дата вірна.", "Помилка при веденні журналу обліку", 
+                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                    WriteLogErrorFile.WriteInLog(logErrorFile, ex.ToString());
+                }                  
             }
 
             // Оновлюємо таблицю gridview і перераховуємо денний баланс грошей
@@ -512,6 +510,7 @@ namespace BelarusianDoor
             catch (Exception ex)
             {
                 MessageBox.Show("Error " + ex.ToString());
+                WriteLogErrorFile.WriteInLog(logErrorFile, ex.ToString());
             }
         }
 
@@ -563,7 +562,6 @@ namespace BelarusianDoor
                 {
                     // Якщо запис існує змінюємо кількість відвідувачів
                     note.VisitorsCount = Convert.ToInt32(textBox_Visitors.Text);
-                    db.Visitors.Add(note);
                 }                    
                 else
                 {
@@ -575,7 +573,6 @@ namespace BelarusianDoor
                     };
                     db.Visitors.Add(newnote);
                 }
-
                 db.SaveChanges();
             }
             textBox_Visitors.ReadOnly = true;

@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="BelarusianDoor.exe" size="891904">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="BelarusianDoor.exe" size="892416">
       <assemblyIdentity name="BelarusianDoor" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>5fdeg4cwOsvUW4yfDC0H+WdXwXk=</dsig:DigestValue>
+        <dsig:DigestValue>eAyX5eD5EYpHBXaHo1accvE6EUg=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -112,6 +112,60 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
       <dsig:DigestValue>XOa+EqPDAvTRr9rUUsIoGWdpqRs=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Triggers\ForIncome\DeleteIncomeTrig.sql" size="681">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>WS6sE1Px8P9/vAILHP83S/7EnJI=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Triggers\ForIncome\IncomeInsertTrig.sql" size="1697">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>OCa/T0HksaSY82XvyX84dzZEhAg=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Triggers\ForIncome\UpdateIncomeTrig.sql" size="1500">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>b9UTHYoNu3XBcjbxVIw3oxHRvN8=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Triggers\ForOutlay\DeleteOutlay.sql" size="874">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>ufckCBB21nFhX5/qrNTCYubQQwU=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Triggers\ForOutlay\InsertOutlayTrig.sql" size="1854">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>scofKtw4UszZ8kTSMOYIVQq/zTw=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Triggers\ForOutlay\UpdateOutlay.sql" size="1456">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>40Wpg48kqn6UQ6o1vzYHDhZp980=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>

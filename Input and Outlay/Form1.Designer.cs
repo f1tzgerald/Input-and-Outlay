@@ -105,35 +105,35 @@ namespace BelarusianDoor
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(15, 523);
+            this.label5.Location = new System.Drawing.Point(15, 500);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(50, 13);
+            this.label5.Size = new System.Drawing.Size(53, 13);
             this.label5.TabIndex = 5;
-            this.label5.Text = "Останок";
+            this.label5.Text = "Останок:";
             // 
             // textBox_dayBalance
             // 
-            this.textBox_dayBalance.Location = new System.Drawing.Point(156, 520);
+            this.textBox_dayBalance.Location = new System.Drawing.Point(135, 497);
             this.textBox_dayBalance.Name = "textBox_dayBalance";
             this.textBox_dayBalance.ReadOnly = true;
-            this.textBox_dayBalance.Size = new System.Drawing.Size(100, 20);
+            this.textBox_dayBalance.Size = new System.Drawing.Size(121, 20);
             this.textBox_dayBalance.TabIndex = 17;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(15, 497);
+            this.label6.Location = new System.Drawing.Point(15, 474);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(54, 13);
+            this.label6.Size = new System.Drawing.Size(57, 13);
             this.label6.TabIndex = 5;
-            this.label6.Text = "На ранок";
+            this.label6.Text = "На ранок:";
             // 
             // textBox_moneyYesterdayEvening
             // 
-            this.textBox_moneyYesterdayEvening.Location = new System.Drawing.Point(156, 494);
+            this.textBox_moneyYesterdayEvening.Location = new System.Drawing.Point(135, 471);
             this.textBox_moneyYesterdayEvening.Name = "textBox_moneyYesterdayEvening";
             this.textBox_moneyYesterdayEvening.ReadOnly = true;
-            this.textBox_moneyYesterdayEvening.Size = new System.Drawing.Size(100, 20);
+            this.textBox_moneyYesterdayEvening.Size = new System.Drawing.Size(121, 20);
             this.textBox_moneyYesterdayEvening.TabIndex = 16;
             // 
             // btn_SaveInExcelFile
@@ -363,7 +363,7 @@ namespace BelarusianDoor
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(15, 470);
+            this.label13.Location = new System.Drawing.Point(395, 474);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(135, 13);
             this.label13.TabIndex = 5;
@@ -371,16 +371,16 @@ namespace BelarusianDoor
             // 
             // textBox_summInputToday
             // 
-            this.textBox_summInputToday.Location = new System.Drawing.Point(156, 467);
+            this.textBox_summInputToday.Location = new System.Drawing.Point(566, 471);
             this.textBox_summInputToday.Name = "textBox_summInputToday";
             this.textBox_summInputToday.ReadOnly = true;
-            this.textBox_summInputToday.Size = new System.Drawing.Size(100, 20);
+            this.textBox_summInputToday.Size = new System.Drawing.Size(112, 20);
             this.textBox_summInputToday.TabIndex = 14;
             // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(510, 470);
+            this.label14.Location = new System.Drawing.Point(395, 500);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(108, 13);
             this.label14.TabIndex = 5;
@@ -388,7 +388,7 @@ namespace BelarusianDoor
             // 
             // textBox_summaOutlayToday
             // 
-            this.textBox_summaOutlayToday.Location = new System.Drawing.Point(654, 467);
+            this.textBox_summaOutlayToday.Location = new System.Drawing.Point(566, 497);
             this.textBox_summaOutlayToday.Name = "textBox_summaOutlayToday";
             this.textBox_summaOutlayToday.ReadOnly = true;
             this.textBox_summaOutlayToday.Size = new System.Drawing.Size(112, 20);

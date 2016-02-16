@@ -132,6 +132,7 @@
     <Compile Include="IncomeMoney.cs">
       <DependentUpon>Doors.tt</DependentUpon>
     </Compile>
+    <Compile Include="WriteLogErrorFile.cs" />
     <Compile Include="OnlyNumber.cs" />
     <Compile Include="OutlayMoney.cs">
       <DependentUpon>Doors.tt</DependentUpon>
@@ -220,6 +221,12 @@
       <DependentUpon>Doors.edmx</DependentUpon>
       <LastGenOutput>Doors.cs</LastGenOutput>
     </Content>
+    <Content Include="Triggers\ForIncome\DeleteIncomeTrig.sql" />
+    <Content Include="Triggers\ForIncome\IncomeInsertTrig.sql" />
+    <Content Include="Triggers\ForIncome\UpdateIncomeTrig.sql" />
+    <Content Include="Triggers\ForOutlay\DeleteOutlay.sql" />
+    <Content Include="Triggers\ForOutlay\InsertOutlayTrig.sql" />
+    <Content Include="Triggers\ForOutlay\UpdateOutlay.sql" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
