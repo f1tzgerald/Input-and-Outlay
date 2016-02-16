@@ -39,7 +39,7 @@ namespace BelarusianDoor
         /// <summary>
         /// Сохраняем файлы в формате пдф и ексель в папки
         /// </summary>
-        public void MakeExcelAndPdfFiles(decimal moneyAtStart, decimal moneyBalance)
+        public void MakeExcelFile(decimal moneyAtStart, decimal moneyBalance)
         {
             // Перевіряємо чи є папка року (2015/2016/2017)
             string directoryFolder = "D:\\ExcelFilesDveriBelorusii\\excel\\" + yearInput;
@@ -89,32 +89,6 @@ namespace BelarusianDoor
 
                 // Зберігаємо файл в форматі екселя
                 oBook.SaveAs(dateFile);
-
-                // Зберігаємо файл в форматі пдф
-                // Перевіряємо чи є папка року (2015/2016/2017)
-                string directoryFolderPDF = "D:\\ExcelFilesDveriBelorusii\\PDF\\" + yearInput;
-                if (!Directory.Exists(directoryFolderPDF))
-                {
-                    Directory.CreateDirectory(directoryFolderPDF);
-                }
-
-                // Перевіряємо чи є папка місяця (грудень/січень/лютий)
-                string monthFolderPDF = directoryFolderPDF + "\\" + monthInput;
-                if (!Directory.Exists(monthFolderPDF))
-                {
-                    Directory.CreateDirectory(monthFolderPDF);
-                }
-
-                string dateFilePDF = monthFolderPDF + "\\" + dateForFileName;
-
-                // Якщо файл існує - видаляємо і створюємо новий
-                if (File.Exists(dateFilePDF))
-                {
-                    File.Delete(dateFilePDF);
-                }
-
-                oBook.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, dateFilePDF + ".pdf");
-
 
                 MessageBox.Show("Дані збережено!");
             }
@@ -339,19 +313,22 @@ namespace BelarusianDoor
                 // Заповнюємо даними СУМУ
                 string cellNameSumma = "A" + j;
                 oCells = oSheet.Range[cellNameSumma];
-                oCells.Value = dt["Summa", i].Value.ToString();
+
+                oCells.Value = string.Format(
+                    Math.Round(Convert.ToDecimal(dt["Summa", i].Value),2)       //50.0000 --> 50.00
+                    .ToString());
+
                 oCells.HorizontalAlignment = Excel.Constants.xlCenter;
                 oCells.VerticalAlignment = Excel.Constants.xlCenter;
                 oCells.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
                 oCells.Borders.Weight = Excel.XlBorderWeight.xlThin;
                 oCells.Font.Size = 12;
                 oCells.EntireColumn.AutoFit();
-                //oCells.NumberFormat = "$#.##";
 
                 // Заповнюємо даними ХТО ДАВ ГРОШІ
-                string cellNameWhoGiveMoney = "B" + j;
-                oCells = oSheet.Range[cellNameWhoGiveMoney];
-                oCells.Value = dt["WhoGiveMoney", i].Value.ToString();
+                string cellCustomer = "B" + j;
+                oCells = oSheet.Range[cellCustomer];
+                oCells.Value = dt["Customer", i].Value.ToString();
                 oCells.HorizontalAlignment = Excel.Constants.xlCenter;
                 oCells.VerticalAlignment = Excel.Constants.xlCenter;
                 oCells.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
@@ -359,9 +336,9 @@ namespace BelarusianDoor
                 oCells.Font.Size = 12;
 
                 // Заповнюємо даними ХТО ОТРИМАВ ГРОШІ
-                string cellNameWhoReceiveMoney = "C" + j;
-                oCells = oSheet.Range[cellNameWhoReceiveMoney];
-                oCells.Value = dt["FullName", i].Value.ToString();
+                string cellEmployee = "C" + j;
+                oCells = oSheet.Range[cellEmployee];
+                oCells.Value = dt["Employee", i].Value.ToString();
                 oCells.HorizontalAlignment = Excel.Constants.xlCenter;
                 oCells.VerticalAlignment = Excel.Constants.xlCenter;
                 oCells.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
@@ -369,8 +346,8 @@ namespace BelarusianDoor
                 oCells.Font.Size = 12;
 
                 // Підпис - "Х"
-                string cellPidpus = "D" + j;
-                oCells = oSheet.Range[cellPidpus];
+                string cellSign = "D" + j;
+                oCells = oSheet.Range[cellSign];
                 oCells.Value = "X";
                 oCells.HorizontalAlignment = Excel.Constants.xlCenter;
                 oCells.VerticalAlignment = Excel.Constants.xlCenter;
@@ -385,39 +362,41 @@ namespace BelarusianDoor
         /// </summary>
         private void InputDataToOutlay(DataGridView dv)
         {
-
             for (int i = 0, j = 9; i < dv.Rows.Count; i++, j++)
             {
                 // E9 - начало суммы
                 string cellNameSumma = "E" + j;
                 oCells = oSheet.Range[cellNameSumma];
-                oCells.Value = dv["ValueMoney", i].Value.ToString();
-                oCells.Borders.Weight = Excel.XlBorderWeight.xlThin;
-                oCells.Font.Size = 12;
-                oCells.HorizontalAlignment = Excel.Constants.xlCenter;
-                oCells.VerticalAlignment = Excel.Constants.xlCenter;
-                //oCells.NumberFormat = "$#.##";
 
+                oCells.Value = string.Format(
+                                    Math.Round(Convert.ToDecimal(dv["Summa", i].Value), 2).
+                                    ToString());
 
-                string cellNameWhereMoneyComes = "F" + j;
-                oCells = oSheet.Range[cellNameWhereMoneyComes];
-                oCells.Value = dv["WhereMoneyPut", i].Value.ToString();
                 oCells.Borders.Weight = Excel.XlBorderWeight.xlThin;
                 oCells.Font.Size = 12;
                 oCells.HorizontalAlignment = Excel.Constants.xlCenter;
                 oCells.VerticalAlignment = Excel.Constants.xlCenter;
 
 
-                string cellNameWhoReceive = "G" + j;
-                oCells = oSheet.Range[cellNameWhoReceive];
-                oCells.Value = dv["WhomReceiveMoney", i].Value.ToString();
+                string cellWhereSpend = "F" + j;
+                oCells = oSheet.Range[cellWhereSpend];
+                oCells.Value = dv["WhereSpend", i].Value.ToString();
+                oCells.Borders.Weight = Excel.XlBorderWeight.xlThin;
+                oCells.Font.Size = 12;
+                oCells.HorizontalAlignment = Excel.Constants.xlCenter;
+                oCells.VerticalAlignment = Excel.Constants.xlCenter;
+
+
+                string cellWhoReceive = "G" + j;
+                oCells = oSheet.Range[cellWhoReceive];
+                oCells.Value = dv["WhoReceive", i].Value.ToString();
                 oCells.HorizontalAlignment = Excel.Constants.xlCenter;
                 oCells.VerticalAlignment = Excel.Constants.xlCenter;
                 oCells.Borders.Weight = Excel.XlBorderWeight.xlThin;
                 oCells.Font.Size = 12;
 
-                string cellPidpus = "H" + j;
-                oCells = oSheet.Range[cellPidpus];
+                string cellSign = "H" + j;
+                oCells = oSheet.Range[cellSign];
                 oCells.Value = "X";
                 oCells.HorizontalAlignment = Excel.Constants.xlCenter;
                 oCells.VerticalAlignment = Excel.Constants.xlCenter;
@@ -439,7 +418,6 @@ namespace BelarusianDoor
             oCells.VerticalAlignment = Excel.Constants.xlCenter;
             oCells.Font.Size = 12;
             oCells.Font.Bold = true;
-            //oCells.NumberFormat = "$#.##";
 
             // Кількість грошей, що залишилася:
             oCells = oSheet.Range["E20", "F20"];
@@ -449,7 +427,6 @@ namespace BelarusianDoor
             oCells.VerticalAlignment = Excel.Constants.xlCenter;
             oCells.Font.Size = 12;
             oCells.Font.Bold = true;
-            //oCells.NumberFormat = "$#.##";
         }
     }
 }
