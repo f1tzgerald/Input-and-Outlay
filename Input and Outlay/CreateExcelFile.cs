@@ -25,6 +25,9 @@ namespace BelarusianDoor
         private DataGridView dgviewIncome;
         private DataGridView dgviewOutlay;
 
+        string excelFilePath = "D:\\ExcelFilesDveriBelorusii\\excel\\";
+        string pdfFilePath = "D:\\ExcelFilesDveriBelorusii\\PDF\\";
+
         public CreateExcelFile(DateTime _dateTime, DataGridView _dgvIncome, DataGridView _dgvOutlay)
         {
             dateTime = _dateTime;
@@ -41,8 +44,58 @@ namespace BelarusianDoor
         /// </summary>
         public void MakeExcelFile(decimal moneyAtStart, decimal moneyBalance)
         {
+            string dateFile;    //Повна назва файлу для зберігання
+            try
+            {
+                CreateFolderForSavingFile(excelFilePath, out dateFile);
+
+                oApp = new Excel.Application();
+                oBook = oApp.Workbooks.Add();
+                oSheet = (Excel.Worksheet)oBook.Worksheets.get_Item(1);
+
+                // Заповнюємо excel файл данними
+                CreateFullFile();
+                InputInformationFields(moneyAtStart, moneyBalance);
+
+                // Зберігаємо файл в форматі екселя
+                oBook.SaveAs(dateFile + ".xlsx");
+
+                CreateFolderForSavingFile(pdfFilePath, out dateFile);
+
+                // Додаткова перевірка при зберіганні pdf файла на встановлене розширення в Office
+                try
+                {
+                    oBook.ExportAsFixedFormat(Excel.XlFixedFormatType.xlTypePDF, dateFile + ".pdf");
+                }
+                catch (ArgumentException)
+                {
+                    MessageBox.Show("Помилка при збереженні PDF файла. Перевірте чи у Вас встановлене розширення в "
+                        + " Microsoft Office для збереження файлів в форматі PDF/XPS.", "Помилка при збереженні PDF",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }               
+                catch (Exception)
+                {
+                    MessageBox.Show("Помилка при збереженні pdf файла.");
+                }
+
+
+                MessageBox.Show("Дані збережено!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error");
+            }
+            finally
+            {
+                oBook.Close();
+                oApp.Quit();
+            }
+        }
+        
+        private void CreateFolderForSavingFile(string filePath, out string dateFile)
+        {
             // Перевіряємо чи є папка року (2015/2016/2017)
-            string directoryFolder = "D:\\ExcelFilesDveriBelorusii\\excel\\" + yearInput;
+            string directoryFolder = filePath + yearInput;
             if (!Directory.Exists(directoryFolder))
             {
                 Directory.CreateDirectory(directoryFolder);
@@ -55,7 +108,7 @@ namespace BelarusianDoor
                 Directory.CreateDirectory(monthFolder);
             }
 
-            string dateFile = monthFolder + "\\" + dateForFileName + ".xlsx";
+            dateFile = monthFolder + "\\" + dateForFileName;
 
             // Якщо файл існує - видаляємо і створюємо новий
             if (File.Exists(dateFile))
@@ -76,33 +129,8 @@ namespace BelarusianDoor
                 else
                     File.Delete(dateFile);
             }
-
-            try
-            {
-                oApp = new Excel.Application();
-                oBook = oApp.Workbooks.Add();
-                oSheet = (Excel.Worksheet)oBook.Worksheets.get_Item(1);
-
-                // Заполняем файл данными
-                CreateFullFile();
-                InputInformationFields(moneyAtStart, moneyBalance);
-
-                // Зберігаємо файл в форматі екселя
-                oBook.SaveAs(dateFile);
-
-                MessageBox.Show("Дані збережено!");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Error");
-            }
-            finally
-            {
-                oBook.Close();
-                oApp.Quit();
-            }
         }
-        
+
         private void CreateFullFile()
         {
             // Створюємо базовий шаблон
