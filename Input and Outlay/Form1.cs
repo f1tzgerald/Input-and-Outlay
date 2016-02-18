@@ -9,7 +9,7 @@ namespace BelarusianDoor
 {
     public partial class Form1 : Form
     {
-        string logErrorFile;
+        string logErrorFile = Application.StartupPath + @"\errorlog.txt";
 
         public Form1()
         {
@@ -20,8 +20,6 @@ namespace BelarusianDoor
                 AutoFillComboBox();
                 LoadTables();
                 CalculateDayBalance();
-
-                logErrorFile = Application.StartupPath + @"\errorlog.txt";
             }
             catch (Exception ex)
             {
@@ -590,6 +588,16 @@ namespace BelarusianDoor
         private void textBox_Summ1_KeyPress(object sender, KeyPressEventArgs e)
         {
             InputOnlyNumber.inputOnlyNumber(sender, e);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            try { }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Ошибка");
+                WriteLogErrorFile.WriteInLog(logErrorFile, ex.ToString());
+            }
         }
     }
 }
