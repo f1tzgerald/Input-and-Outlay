@@ -99,12 +99,6 @@
       <DependentUpon>Doors.tt</DependentUpon>
     </Compile>
     <Compile Include="CreateExcelFile.cs" />
-    <Compile Include="Data\Balance.cs" />
-    <Compile Include="Data\Employee.cs" />
-    <Compile Include="Data\IncomeMoney.cs" />
-    <Compile Include="Data\MainContext.cs" />
-    <Compile Include="Data\OutlayMoney.cs" />
-    <Compile Include="Data\Visitor.cs" />
     <Compile Include="Doors.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
