@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Windows.Forms;
-using System.Data.OleDb;
-using BelarusianDoor.Data;
 using System.Linq;
 
 namespace BelarusianDoor
